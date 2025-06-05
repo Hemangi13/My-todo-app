@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # React + TypeScript + Vite
 
@@ -64,3 +65,6 @@ export default tseslint.config({
 # My ToDo App
 
 This is a fullstack application built using React, TypeScript, and .NET API.
+=======
+# todo_web_application
+>>>>>>> 520b3df6179b0d6a51c10910d2381b9c3f569a29

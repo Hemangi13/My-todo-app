@@ -1,0 +1,25 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr.overdue {
+  background-color: #ffe6e6;
+}
