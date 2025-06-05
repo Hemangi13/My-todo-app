@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
 type Task = {
@@ -14,40 +15,77 @@ function App() {
   const [deadline, setDeadline] = useState('');
   const [error, setError] = useState('');
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get<Task[]>('http://localhost:5000/api/tasks');
+      setTasks(response.data);
+    } catch (err) {
+      console.error('Error fetching tasks:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (taskText.trim().length <= 10) {
       setError('Task must be longer than 10 characters.');
       return;
     }
 
-    const newTask: Task = {
-      id: Date.now(),
-      title: taskText.trim(),
-      deadline: deadline || undefined,
-      isCompleted: false,
-    };
+    try {
+      const response = await axios.post<Task>('http://localhost:5000/api/tasks', {
+        title: taskText.trim(),
+        deadline: deadline || null,
+        isCompleted: false,
+      });
 
-    setTasks([...tasks, newTask]);
-    setTaskText('');
-    setDeadline('');
-    setError('');
+      setTasks([...tasks, response.data]);
+      setTaskText('');
+      setDeadline('');
+      setError('');
+    } catch (err) {
+      console.error('Error adding task:', err);
+      setError('Error adding task');
+    }
   };
 
-  const handleDelete = (id: number) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/tasks/${id}`);
+      setTasks(tasks.filter((task) => task.id !== id));
+    } catch (err) {
+      console.error('Error deleting task:', err);
+    }
   };
 
-  const handleToggleDone = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
-      )
-    );
+  const handleToggleDone = async (id: number) => {
+    try {
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+
+      const updated = { ...task, isCompleted: !task.isCompleted };
+      await axios.put(`http://localhost:5000/api/tasks/${id}`, updated);
+
+      setTasks(
+        tasks.map((t) => (t.id === id ? updated : t))
+      );
+    } catch (err) {
+      console.error('Error updating task:', err);
+    }
   };
 
   const isOverdue = (task: Task) => {
-    return task.deadline && !task.isCompleted && new Date(task.deadline) < new Date();
+    if (!task.deadline || task.isCompleted) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // compare only date portion
+    const deadlineDate = new Date(task.deadline);
+    deadlineDate.setHours(0, 0, 0, 0);
+
+    return deadlineDate < today;
   };
 
   return (
@@ -98,7 +136,18 @@ function App() {
                 />
               </td>
               <td>{task.title}</td>
-              <td>{task.deadline || '-'}</td>
+             <td>
+            {task.deadline? (() => {
+            const date = new Date(task.deadline);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${day}-${month}-${year} ${hours}:${minutes}`;
+            })()
+            : '-'}
+            </td>
               <td>
                 <button
                   onClick={() => handleDelete(task.id)}
@@ -108,8 +157,6 @@ function App() {
                     color: 'blue',
                     textDecoration: 'underline',
                     cursor: 'pointer',
-                    padding: 0,
-                    fontSize: '1rem',
                   }}
                 >
                   Delete

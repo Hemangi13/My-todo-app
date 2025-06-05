@@ -161,3 +161,8 @@
 /Users/hemangipatil/Desktop/my-todo-app/todo-backend/obj/Debug/net8.0/ref/todo-backend.dll
 /Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/todo-backend.staticwebassets.runtime.json
 /Users/hemangipatil/Desktop/my-todo-app/todo-backend/obj/Debug/net8.0/todo-backend.sourcelink.json
+/Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/package-lock.json
+/Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/package.json
+/Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/tsconfig.app.json
+/Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/tsconfig.json
+/Users/hemangipatil/Desktop/my-todo-app/todo-backend/bin/Debug/net8.0/tsconfig.node.json
