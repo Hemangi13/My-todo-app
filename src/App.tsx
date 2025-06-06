@@ -93,19 +93,33 @@ function App() {
     <div className="container">
       <h1>ToDo App</h1>
       <form onSubmit={handleAddTask} className="form">
-        <input
-          type="text"
-          value={taskText}
-          onChange={(e) => setTaskText(e.target.value)}
-          placeholder="Enter task"
-        />
-        <input
-          type="date"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-        />
-        <button type="submit">Add Task</button>
-      </form>
+  <input
+    type="text"
+    value={taskText}
+    onChange={(e) => setTaskText(e.target.value)}
+    placeholder="Enter task"
+  />
+  <input
+    type="date"
+    value={deadline.split('T')[0]} 
+    onChange={(e) => {
+      const date = e.target.value;
+      const time = deadline.split('T')[1] || "00:00"; 
+      setDeadline(`${date}T${time}`);
+    }}
+  />
+  <input
+    type="time"
+    value={deadline.split('T')[1] || ""}
+    onChange={(e) => {
+      const time = e.target.value;
+      const date = deadline.split('T')[0] || new Date().toISOString().split('T')[0];
+      setDeadline(`${date}T${time}`);
+    }}
+  />
+  <button type="submit">Add Task</button>
+</form>
+
       {error && <p className="error">{error}</p>}
 
       <table>
