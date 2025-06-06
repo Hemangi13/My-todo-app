@@ -9,7 +9,6 @@ type Task = {
   isCompleted: boolean;
 };
 
-
 const BASE_URL = 'https://my-todo-app-xyta.onrender.com/api/tasks';
 
 function App() {
